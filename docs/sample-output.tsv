@@ -1,0 +1,9 @@
+# 14 patterns, 6 clean, 8 findings
+high	REDOS001	line 2: (a+)+$	nested quantifiers: the same text can be split between iterations in many ways (confirmed: 2047 steps on 10 chars, >2000000 steps on 20 chars)
+high	REDOS001	line 3: ^(([a-z])+.)+[A-Z]([a-z])+$	nested quantifiers: the same text can be split between iterations in many ways (confirmed: 463 steps on 10 chars, 57311 steps on 20 chars)
+high	REDOS001	line 4: ([a-zA-Z]+\s?)*$	nested quantifiers: the same text can be split between iterations in many ways (confirmed: 3070 steps on 10 chars, >2000000 steps on 20 chars)
+high	REDOS002	line 5: (\w|\d)+@	alternation inside a loop with overlapping branches (confirmed: 6140 steps on 10 chars, >2000000 steps on 20 chars)
+high	REDOS002	line 6: (a|a)*b	alternation inside a loop with overlapping branches (confirmed: 6141 steps on 10 chars, >2000000 steps on 20 chars)
+high	REDOS003	line 8: \d+\d+\d+x	3 adjacent loops over overlapping characters: cubic time on failing input (confirmed: 9051 steps on 30 chars, 72101 steps on 60 chars)
+medium	REDOS003	line 7: .*.*=.*	2 adjacent loops over overlapping characters: quadratic time on failing input (confirmed: 1023 steps on 30 chars, 3843 steps on 60 chars)
+info	REDOS000	line 17: (a)\1+	not analysed: backreference is not modelled
