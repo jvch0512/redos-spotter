@@ -2,6 +2,8 @@
 
 A regular expression that backtracks exponentially lets one crafted string freeze a service. redos-spotter reads patterns (one per line), parses them, flags nested quantifiers, overlapping alternations and chains of overlapping loops, and then confirms each finding by running a built-in backtracking matcher on a generated attack string and counting steps. You see the evidence, not just a warning.
 
+![Terminal demo of redos-spotter on its sample data](docs/demo.svg)
+
 **Live demo:** https://jvch0512.github.io/redos-spotter/ (A mix of well-known vulnerable patterns and safe ones.)
 
 Common Lisp (SBCL), no libraries. The demo page is rendered from the tool's `--tsv` output by `scripts/site.py` (Python 3, only needed to regenerate the page).
@@ -46,3 +48,13 @@ make test    # 75 checks
 ```
 
 MIT.
+
+## Code scanning (SARIF)
+
+`scripts/tsv2sarif.py` converts the `--tsv` output into SARIF 2.1.0, so findings show up in GitHub code scanning:
+
+```sh
+./bin/redos-spotter examples/patterns.txt --tsv | python3 scripts/tsv2sarif.py --tool redos-spotter --prefix examples > results.sarif
+```
+
+Upload `results.sarif` with `github/codeql-action/upload-sarif`. Severities map to SARIF levels (critical and high to error, medium to warning, low and info to note) and to a `security-severity` score.
